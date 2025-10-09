@@ -1,0 +1,18 @@
+# Ignore secret files
+**/application-secret.properties
+
+# Ignore build outputs
+target/
+**/target/
+
+# IDE configs
+.idea/
+.vscode/
+*.iml
+
+# Logs
+*.log
+
+# OS/system files
+.DS_Store
+Thumbs.db
