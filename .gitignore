@@ -1,5 +1,5 @@
 # Ignore secret files
-**/application-secret.properties
+employee-service/src/main/resources/application-secret.properties
 
 # Ignore build outputs
 target/

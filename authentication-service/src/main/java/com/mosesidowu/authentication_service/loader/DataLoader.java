@@ -1,7 +1,6 @@
 // authentication-service/src/main/java/com/darum/authenticationservice/DataLoader.java
 package com.mosesidowu.authentication_service.loader;
 
-import com.mosesidowu.authentication_service.data.model.Role;
 import com.mosesidowu.authentication_service.data.model.User;
 import com.mosesidowu.authentication_service.data.repository.RoleRepository;
 import com.mosesidowu.authentication_service.data.repository.UserRepository;

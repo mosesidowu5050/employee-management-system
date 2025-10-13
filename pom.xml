@@ -9,6 +9,18 @@
     <artifactId>employee-management-system</artifactId>
     <version>1.0.0</version>
     <packaging>pom</packaging>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
+
+    </dependencies>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -22,12 +34,14 @@
         <module>authentication-service</module>
         <module>config-server</module>
         <module>discovery-service</module>
+        <module>employee-service</module>
     </modules>
 
     <properties>
         <java.version>17</java.version>
         <spring.boot.version>3.3.4</spring.boot.version>
         <spring.cloud.version>2023.0.3</spring.cloud.version>
+        <jjwt.version>0.12.3</jjwt.version>
     </properties>
 
     <dependencyManagement>
@@ -46,7 +60,25 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <!-- JJWT BOM -->
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-api</artifactId>
+                <version>${jjwt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-impl</artifactId>
+                <version>${jjwt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-jackson</artifactId>
+                <version>${jjwt.version}</version>
+            </dependency>
+
         </dependencies>
+
 
     </dependencyManagement>
 

@@ -1,11 +1,13 @@
 package com.mosesidowu.authentication_service.service;
 
-import com.mosesidowu.authentication_service.dto.request.LoginRequest;
+import com.mosesidowu.authentication_service.dto.request.AuthRequest;
 import com.mosesidowu.authentication_service.dto.request.RegisterRequest;
-import com.mosesidowu.authentication_service.dto.response.JwtResponse;
+import com.mosesidowu.authentication_service.dto.response.AuthResponse;
 import org.springframework.http.ResponseEntity;
 
 public interface AuthService {
-    ResponseEntity<?> registerUser(RegisterRequest registerRequest);
-    ResponseEntity<?> authenticateUser(LoginRequest loginRequest);
+
+    AuthResponse register(RegisterRequest request);
+    AuthResponse login(AuthRequest request);
+
 }

@@ -1,7 +1,6 @@
 package com.mosesidowu.authentication_service.data.repository;
 
 
-import com.mosesidowu.authentication_service.data.model.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

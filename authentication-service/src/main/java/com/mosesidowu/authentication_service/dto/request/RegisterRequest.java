@@ -1,13 +1,11 @@
 package com.mosesidowu.authentication_service.dto.request;
 
-import lombok.Data;
+import lombok.*;
 
-import java.util.Set;
-
-@Data
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class RegisterRequest {
-    private String username;
-    private String email;
+    private String fullName;
+    private String phoneNumber;
     private String password;
-    private Set<String> roles;
+    private String role; // ADMIN, MANAGER, EMPLOYEE
 }
