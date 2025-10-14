@@ -1,4 +1,4 @@
-package com.mosesidowu.employee_service.service;
+package com.mosesidowu.employee_service.service.employeeService;
 
 
 import com.mosesidowu.employee_service.data.model.Department;
@@ -61,7 +61,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setDepartment(department);
 
         Employee updatedEmployee = employeeRepository.save(employee);
-        return mapToResponse(updatedEmployee);
+        return mapToResponse(updatedEmployee, department);
     }
 
     @Override
@@ -75,14 +75,15 @@ public class EmployeeServiceImpl implements EmployeeService {
     public EmployeeResponse getEmployeeById(Long id) {
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Employee not found with id: " + id));
-        return mapToResponse(employee);
+        Department department = employee.getDepartment();
+        return mapToResponse(employee, department);
     }
 
     @Override
     public List<EmployeeResponse> getAllEmployees() {
         return employeeRepository.findAll()
                 .stream()
-                .map(this::mapToResponse)
+                .map(employee -> mapToResponse(employee, employee.getDepartment()))
                 .collect(Collectors.toList());
     }
 
@@ -90,17 +91,16 @@ public class EmployeeServiceImpl implements EmployeeService {
     public List<EmployeeResponse> getEmployeesByDepartment(Long departmentId) {
         return employeeRepository.findByDepartmentId(departmentId)
                 .stream()
-                .map(this::mapToResponse)
+                .map(employee -> mapToResponse(employee, employee.getDepartment()))
                 .collect(Collectors.toList());
     }
 
-    private EmployeeResponse mapToResponse(Employee employee) {
+    private EmployeeResponse mapToResponse(Employee employee, Department department) {
         return EmployeeResponse.builder()
                 .firstName(employee.getFirstName())
                 .lastName(employee.getLastName())
                 .phoneNumber(employee.getPhoneNumber())
-                .departmentName(employee.getDepartment().getName())
-                .departmentId(employee.getDepartment().getId())
+                .department(department)
                 .build();
     }
 }

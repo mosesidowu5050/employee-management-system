@@ -13,8 +13,6 @@ public class EmployeeResponse {
     private String firstName;
     private String lastName;
     private String phoneNumber;
-    private String departmentName;
-    private Long departmentId;
     private Department department;
 
 }

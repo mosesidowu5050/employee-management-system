@@ -1,4 +1,4 @@
-package com.mosesidowu.employee_service.service;
+package com.mosesidowu.employee_service.service.departmentService;
 
 import com.mosesidowu.employee_service.data.model.Department;
 import com.mosesidowu.employee_service.data.repository.DepartmentRepository;

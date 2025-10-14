@@ -1,4 +1,4 @@
-package com.mosesidowu.employee_service.service;
+package com.mosesidowu.employee_service.service.employeeService;
 
 import com.mosesidowu.employee_service.dto.request.EmployeeRequest;
 import com.mosesidowu.employee_service.dto.response.EmployeeResponse;

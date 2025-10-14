@@ -2,7 +2,7 @@ package com.mosesidowu.employee_service.controller;
 
 import com.mosesidowu.employee_service.dto.request.DepartmentRequest;
 import com.mosesidowu.employee_service.dto.response.DepartmentResponse;
-import com.mosesidowu.employee_service.service.DepartmentService;
+import com.mosesidowu.employee_service.service.departmentService.DepartmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,24 +27,17 @@ public class DepartmentController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/update-department/{id}")
-    public ResponseEntity<DepartmentResponse> updateDepartment(
-            @PathVariable Long id, @RequestBody DepartmentRequest request) {
+    public ResponseEntity<DepartmentResponse> updateDepartment(@PathVariable Long id,
+                                                               @RequestBody DepartmentRequest request) {
         DepartmentResponse response = departmentService.updateDepartment(id, request);
         return ResponseEntity.ok(response);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/delete-department/{id}")
-    public ResponseEntity<Void> deleteDepartment(@PathVariable Long id) {
+    public ResponseEntity<?> deleteDepartment(@PathVariable Long id) {
         departmentService.deleteDepartment(id);
-        return ResponseEntity.noContent().build();
-    }
-
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping("/get-department/{id}")
-    public ResponseEntity<DepartmentResponse> getDepartmentById(@PathVariable Long id) {
-        DepartmentResponse response = departmentService.getDepartmentById(id);
-        return ResponseEntity.ok(response);
+        return new ResponseEntity<>("Department deleted successfully", HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyAuthority('ADMIN')")
@@ -52,5 +45,12 @@ public class DepartmentController {
     public ResponseEntity<List<DepartmentResponse>> getAllDepartments() {
         List<DepartmentResponse> responses = departmentService.getAllDepartments();
         return ResponseEntity.ok(responses);
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/get-department/{id}")
+    public ResponseEntity<DepartmentResponse> getDepartmentById(@PathVariable Long id) {
+        DepartmentResponse response = departmentService.getDepartmentById(id);
+        return ResponseEntity.ok(response);
     }
 }
