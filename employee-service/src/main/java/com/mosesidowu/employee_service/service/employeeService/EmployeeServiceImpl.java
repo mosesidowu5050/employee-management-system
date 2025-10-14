@@ -8,6 +8,7 @@ import com.mosesidowu.employee_service.data.repository.EmployeeRepository;
 import com.mosesidowu.employee_service.dto.request.EmployeeRequest;
 import com.mosesidowu.employee_service.dto.response.EmployeeResponse;
 import com.mosesidowu.employee_service.exception.ResourceNotFoundException;
+import com.mosesidowu.employee_service.kafka.EmployeeEventProducer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
     private final DepartmentRepository departmentRepository;
+    private final EmployeeEventProducer employeeEventProducer;
 
     @Override
     public EmployeeResponse createEmployee(EmployeeRequest request) {
@@ -38,6 +40,21 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         // TODO: Save to DB
         Employee saved = employeeRepository.save(employee);
+        // build a JSON-ish string or real JSON
+        String eventMsg = String.format(
+                "{\"employeeId\":%d,\"firstName\":\"%s\"," +
+                        "\"lastName\":\"%s\",\"phoneNumber\":\"%s\"," +
+                        "\"departmentId\":%d,\"departmentName\":\"%s\"}",
+                saved.getEmployeeId(),
+                saved.getFirstName(),
+                saved.getLastName(),
+                saved.getPhoneNumber(),
+                saved.getDepartment().getId(),
+                saved.getDepartment().getName()
+        );
+
+        employeeEventProducer.publishEmployeeCreated(eventMsg, String.valueOf(saved.getEmployeeId()));
+
 
         // TODO: Return response DTO
         return EmployeeResponse.builder()
