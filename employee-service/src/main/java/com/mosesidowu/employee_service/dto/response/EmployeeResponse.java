@@ -1,5 +1,6 @@
 package com.mosesidowu.employee_service.dto.response;
 
+import com.mosesidowu.employee_service.data.model.Department;
 import lombok.*;
 
 @Getter
@@ -12,5 +13,8 @@ public class EmployeeResponse {
     private String firstName;
     private String lastName;
     private String phoneNumber;
+    private String departmentName;
     private Long departmentId;
+    private Department department;
+
 }

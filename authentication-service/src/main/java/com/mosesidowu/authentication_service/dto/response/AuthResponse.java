@@ -10,7 +10,8 @@ import java.util.List;
 
 public class AuthResponse {
 
-    private String token;
+    private String message;
+    private String phoneNumber;
     private String role;
     private Long userId;
 }

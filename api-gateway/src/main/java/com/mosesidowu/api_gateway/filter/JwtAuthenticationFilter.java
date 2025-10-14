@@ -17,17 +17,16 @@ public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
 
     private final JwtUtil jwtUtil;
 
-
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         String path = exchange.getRequest().getURI().getPath();
 
-        // Public endpoints (authentication-service)
+        // Allow public endpoints
         if (path.startsWith("/api/auth")) {
             return chain.filter(exchange);
         }
 
-        // Check Authorization header
+        // Check for Authorization header
         String authHeader = exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
@@ -42,12 +41,11 @@ public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
             return exchange.getResponse().setComplete();
         }
 
-        // Extract user info
-        var body = claims.getBody();
-        Long userId = ((Number) body.get("userId")).longValue();
-        String role = (String) body.get("role");
+        // ✅ Extract user info safely
+        Long userId = ((Number) claims.get("userId")).longValue();
+        String role = (String) claims.get("role");
 
-        // Forward headers
+        // ✅ Forward headers downstream
         var mutated = exchange.getRequest()
                 .mutate()
                 .header("X-User-Id", String.valueOf(userId))
@@ -59,6 +57,6 @@ public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
 
     @Override
     public int getOrder() {
-        return -1; // Execute before routing
+        return -1; // Run before route filters
     }
 }

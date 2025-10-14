@@ -6,6 +6,7 @@ import com.mosesidowu.employee_service.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,6 +19,7 @@ public class EmployeeController {
     private final EmployeeService employeeService;
 
     // ✅ Create Employee
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/create-employee")
     public ResponseEntity<EmployeeResponse> createEmployee(@RequestBody EmployeeRequest request) {
         EmployeeResponse response = employeeService.createEmployee(request);
@@ -25,6 +27,7 @@ public class EmployeeController {
     }
 
     // ✅ Update Employee
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/update-employee/{id}")
     public ResponseEntity<EmployeeResponse> updateEmployee(@PathVariable Long id, @RequestBody EmployeeRequest request) {
         EmployeeResponse response = employeeService.updateEmployee(id, request);
@@ -32,6 +35,7 @@ public class EmployeeController {
     }
 
     // ✅ Delete Employee
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/delete-employee/{id}")
     public ResponseEntity<Void> deleteEmployee(@PathVariable Long id) {
         employeeService.deleteEmployee(id);
@@ -39,6 +43,7 @@ public class EmployeeController {
     }
 
     // ✅ Get Employee by ID
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/get-employee/{id}")
     public ResponseEntity<EmployeeResponse> getEmployeeById(@PathVariable Long id) {
         EmployeeResponse response = employeeService.getEmployeeById(id);
@@ -46,6 +51,7 @@ public class EmployeeController {
     }
 
     // ✅ Get All Employees
+    @PreAuthorize("hasAuthority('MANAGER')")
     @GetMapping("/get-all-employees")
     public ResponseEntity<List<EmployeeResponse>> getAllEmployees() {
         List<EmployeeResponse> responses = employeeService.getAllEmployees();
@@ -53,6 +59,7 @@ public class EmployeeController {
     }
 
     // ✅ Get Employees by Department
+    @PreAuthorize("hasAuthority('MANAGER')")
     @GetMapping("/department/{departmentId}")
     public ResponseEntity<List<EmployeeResponse>> getEmployeesByDepartment(@PathVariable Long departmentId) {
         List<EmployeeResponse> responses = employeeService.getEmployeesByDepartment(departmentId);

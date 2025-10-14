@@ -4,6 +4,7 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
 import java.security.Key;
 import java.util.Map;
 
@@ -17,18 +18,21 @@ public class JwtUtil {
         return Keys.hmacShaKeyFor(secret.getBytes());
     }
 
-    public Jws<Claims> validateToken(String token) {
+    // ✅ Return Claims directly
+    public Claims validateToken(String token) {
         try {
-            return Jwts.parser()
-                    .setSigningKey(getSigningKey())
+            return Jwts.parserBuilder()
+                    .setSigningKey(getSigningKey()) // ✅ fixed method name
                     .build()
-                    .parseClaimsJws(token);
+                    .parseClaimsJws(token)
+                    .getBody();
         } catch (JwtException e) {
-            return null;
+            return null; // token invalid
         }
     }
 
     public Map<String, Object> extractClaims(String token) {
-        return validateToken(token).getBody();
+        Claims claims = validateToken(token);
+        return claims != null ? claims : null;
     }
 }

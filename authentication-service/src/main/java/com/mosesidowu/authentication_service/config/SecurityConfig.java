@@ -32,7 +32,9 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable) // Disable CSRF for stateless REST API
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/auth/**").permitAll() // Allow access to authentication endpoints
+                        .requestMatchers("/api/auth/**").permitAll() // Allow access to authentication endpoints
+                        .requestMatchers("/api/employees/**").authenticated()
+                        .requestMatchers("/api/departments/**").authenticated()
                         .anyRequest().authenticated() // All other requests need authentication
                 )
                 .httpBasic(withDefaults()); // Enable basic authentication for now, will replace with JWT

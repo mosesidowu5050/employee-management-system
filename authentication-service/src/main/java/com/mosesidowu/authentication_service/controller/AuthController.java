@@ -3,6 +3,7 @@ package com.mosesidowu.authentication_service.controller;
 import com.mosesidowu.authentication_service.dto.request.AuthRequest;
 import com.mosesidowu.authentication_service.dto.request.RegisterRequest;
 import com.mosesidowu.authentication_service.dto.response.AuthResponse;
+import com.mosesidowu.authentication_service.dto.response.LoginResponse;
 import com.mosesidowu.authentication_service.service.AuthService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +23,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
+    public ResponseEntity<LoginResponse> login(@RequestBody AuthRequest request) {
         return ResponseEntity.ok(authService.login(request));
     }
 }

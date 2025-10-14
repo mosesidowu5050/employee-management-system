@@ -5,10 +5,12 @@ import com.mosesidowu.authentication_service.data.repository.UserRepository;
 import com.mosesidowu.authentication_service.dto.request.AuthRequest;
 import com.mosesidowu.authentication_service.dto.request.RegisterRequest;
 import com.mosesidowu.authentication_service.dto.response.AuthResponse;
-import org.springframework.http.ResponseEntity;
+import com.mosesidowu.authentication_service.dto.response.LoginResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 public class AuthServiceImpl implements AuthService {
 
@@ -24,8 +26,9 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public AuthResponse register(RegisterRequest request) {
-        if (userRepository.existsByEmail(request.getPhoneNumber())) {
-            throw new RuntimeException("User already exists");
+        if (userRepository.existsByPhoneNumber(request.getPhoneNumber())) {
+            log.info("User with phone number {} already exists", request.getPhoneNumber());
+            throw new RuntimeException("User with this phone number already exists");
         }
 
         User user = User.builder()
@@ -37,17 +40,16 @@ public class AuthServiceImpl implements AuthService {
 
         userRepository.save(user);
 
-        String token = jwtService.generateToken(user.getId(), user.getPhoneNumber(), user.getRole().name());
-
         return AuthResponse.builder()
-                .token(token)
+                .message("User registered successfully")
                 .userId(user.getId())
+                .phoneNumber(user.getPhoneNumber())
                 .role(user.getRole().name())
                 .build();
     }
 
     @Override
-    public AuthResponse login(AuthRequest request) {
+    public LoginResponse login(AuthRequest request) {
         User user = userRepository.findByPhoneNumber(request.getPhoneNumber())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -57,9 +59,9 @@ public class AuthServiceImpl implements AuthService {
 
         String token = jwtService.generateToken(user.getId(), user.getPhoneNumber(), user.getRole().name());
 
-        return AuthResponse.builder()
+        return LoginResponse.builder()
+                .message("Login successful")
                 .token(token)
-                .userId(user.getId())
                 .role(user.getRole().name())
                 .build();
     }

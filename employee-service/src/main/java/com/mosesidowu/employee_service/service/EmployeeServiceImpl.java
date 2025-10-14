@@ -1,7 +1,9 @@
 package com.mosesidowu.employee_service.service;
 
 
+import com.mosesidowu.employee_service.data.model.Department;
 import com.mosesidowu.employee_service.data.model.Employee;
+import com.mosesidowu.employee_service.data.repository.DepartmentRepository;
 import com.mosesidowu.employee_service.data.repository.EmployeeRepository;
 import com.mosesidowu.employee_service.dto.request.EmployeeRequest;
 import com.mosesidowu.employee_service.dto.response.EmployeeResponse;
@@ -17,29 +19,46 @@ import java.util.stream.Collectors;
 public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
+    private final DepartmentRepository departmentRepository;
 
     @Override
     public EmployeeResponse createEmployee(EmployeeRequest request) {
+
+        // TODO: Validate and fetch the department
+        Department department = departmentRepository.getDepartmentById(request.getDepartmentId())
+                .orElseThrow(() -> new RuntimeException("Department not found"));
+
+        //TODO: Step 2: Create and populate employee entity
         Employee employee = Employee.builder()
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
                 .phoneNumber(request.getPhoneNumber())
-                .departmentId(request.getDepartmentId())
+                .department(department)
                 .build();
 
-        Employee savedEmployee = employeeRepository.save(employee);
-        return mapToResponse(savedEmployee);
+        // TODO: Save to DB
+        Employee saved = employeeRepository.save(employee);
+
+        // TODO: Return response DTO
+        return EmployeeResponse.builder()
+                .firstName(saved.getFirstName())
+                .lastName(saved.getLastName())
+                .phoneNumber(saved.getPhoneNumber())
+                .department(department)
+                .build();
     }
 
     @Override
     public EmployeeResponse updateEmployee(Long id, EmployeeRequest request) {
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Employee not found with id: " + id));
+        Department department = departmentRepository.findById(request.getDepartmentId())
+                .orElseThrow(() -> new ResourceNotFoundException("Department not found with id: " + request.getDepartmentId()));
 
         employee.setFirstName(request.getFirstName());
         employee.setLastName(request.getLastName());
         employee.setPhoneNumber(request.getPhoneNumber());
-        employee.setDepartmentId(request.getDepartmentId());
+        employee.setDepartment(department);
 
         Employee updatedEmployee = employeeRepository.save(employee);
         return mapToResponse(updatedEmployee);
@@ -80,7 +99,8 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .firstName(employee.getFirstName())
                 .lastName(employee.getLastName())
                 .phoneNumber(employee.getPhoneNumber())
-                .departmentId(employee.getDepartmentId())
+                .departmentName(employee.getDepartment().getName())
+                .departmentId(employee.getDepartment().getId())
                 .build();
     }
 }

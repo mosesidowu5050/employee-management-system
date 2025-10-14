@@ -26,20 +26,14 @@ public class Employee {
     @NotBlank(message = "Last name is required")
     private String lastName;
 
-    @NotBlank(message = "Email is required")
-    private String email;
-
     @NotBlank(message = "Phone number is required")
     private String phoneNumber;
 
     private String status;
 
     @ManyToOne
-    @JoinColumn(name = "department_id")
+    @JoinColumn(name = "department_id", nullable = false)
     private Department department;
-
-    @Column(name = "department_id")
-    private Long departmentId;
 
     private LocalDateTime createdAt = LocalDateTime.now();
 
